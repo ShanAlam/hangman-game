@@ -15,12 +15,21 @@ for i in range(len(random_word)):
   placeholder += "_"
 
 solved = False
-wrong_counter = 0
 
-while (solved == False) and (wrong_counter != 7):
+lives = len(hangman_art.stages) - 1 
+
+guessed = []
+
+while (solved == False) and (lives != 0):
 
   print(" ".join(placeholder), "\n")
+
   choice = input("Pick a letter: ").lower()
+  
+  while choice in guessed:
+    choice = input(f"You already tried {choice}, pick another letter: ").lower()
+    
+  guessed.append(choice)
   
   wrong = 0
   
@@ -29,18 +38,20 @@ while (solved == False) and (wrong_counter != 7):
       placeholder[i] = letter
     else:
       wrong += 1
-  
+
   if wrong == len(random_word):
-    wrong_counter += 1
-    print(hangman_art.stages[-wrong_counter])
+    lives -= 1
+    print(f"You guessed {choice}, that's not in the word, you have {lives} lives remaining")
 
   if "".join(placeholder) == random_word:
     solved = True
+    
+  print(hangman_art.stages[lives])
 
-  print("\n\n\n")
+  print("\n")
 
 if solved == True:
   print(" ".join(placeholder), "\n")
   print("Well done, you won!")
 else:
-  print("Sorry, you lost :(")
+  print(f"Sorry, you lost :(, the word you were looking for was {random_word}")
